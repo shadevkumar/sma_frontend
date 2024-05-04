@@ -3,7 +3,7 @@
   <div class="flex items-center justify-center min-h-screen bg-[#161616]">
     <form
       @submit.prevent="handleSubmit"
-      class="border p-6 gap-2 bg-[#ffffff] lg:w-[30%] 2xl:w-[20%] rounded-md"
+      class="border p-6 gap-2 bg-[#ffffff] max-sm:w-[85%] w-[60%] lg:w-[35%] 2xl:w-[20%] rounded-md"
     >
       <h1 class="text-2xl font-bold mb-4">Login</h1>
 
@@ -14,7 +14,7 @@
           v-model="username"
           type="text"
           required
-          class="border-2"
+          class="border-2 h-10 p-2"
         />
         <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
       </div>
@@ -25,7 +25,7 @@
           v-model="password"
           type="password"
           required
-          class="border-2"
+          class="border-2 h-10 p-2"
         />
       </div>
       <div class="flex flex-col items-center my-3">
