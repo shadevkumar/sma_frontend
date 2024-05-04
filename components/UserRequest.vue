@@ -1,10 +1,10 @@
 <template>
-  <div class="w-[30%] p-4 flex flex-col items-center">
-    <h1>Follow Requests</h1>
+  <div class="w-full md:w-[30%] p-4 flex flex-col items-center ">
+    <div><h1 class="text-xl w-full">Follow Requests</h1></div>
     <div
       v-for="request in requests"
       :key="request.followId"
-      class="user-card m-2 w-[90%] bg-white p-2 rounded-md flex items-center justify-between"
+      class="user-card m-2 w-full md:w-[90%] bg-white p-2 rounded-md flex items-center justify-between"
     >
       <span>{{ request.follower.username }}</span>
       <div class="flex">
@@ -39,7 +39,6 @@ const fetchRequests = async () => {
         Authorization: `Bearer ${accessToken.value}`,
       },
     });
-    console.log("Follow requests:", data);
     requests.value = data;
   } catch (error) {
     console.error("Failed to fetch follow requests:", error);

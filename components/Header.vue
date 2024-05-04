@@ -1,23 +1,24 @@
 <template>
-  <div>
-    <header class="bg-[#F9F9FB] py-2 px-6">
-      <nav class="flex justify-between h-12 items-center">
+  <div class="sticky top-0 z-50">
+    <header class="bg-[#F9F9FB] h-[10vh] px-4 shadow-md">
+      <nav class="flex justify-between h-full items-center">
         <div>
-          <NuxtLink class="text-3xl font-bold" to="/">sma.</NuxtLink>
+          <NuxtLink class="text-xl md:text-3xl font-bold" to="/">sma.</NuxtLink>
         </div>
-        <ul class="flex gap-6 text-lg font-semibold">
-          <li>
+        <ul class="flex gap-6 text-sm md:text-lg font-semibold">
+          <li :class="{ 'border-b-2 border-black': isActive('/') }">
             <NuxtLink to="/">Timeline</NuxtLink>
           </li>
-          <li>
-            <NuxtLink to="/connect">Connect with others</NuxtLink>
+          <li :class="{ 'border-b-2 border-black': isActive('/connect') }">
+            <NuxtLink to="/connect">Connections</NuxtLink>
           </li>
         </ul>
         <div>
           <button
-            class="bg-red-700 px-2 py-1 rounded-md w-full text-white"
+            class="bg-red-700 px-1 md:px-2 py-1 text-sm md:text-base rounded-md w-full text-white"
             @click="handleLogout"
           >
+            <Icon name="material-symbols-light:logout-rounded" />
             Logout
           </button>
         </div>
@@ -28,6 +29,7 @@
 
 <script setup lang="ts">
 import { useAuth } from "@/composables/useAuth";
+const route = useRoute();
 
 const { logout } = useAuth();
 let userId = null;
@@ -42,6 +44,10 @@ const handleLogout = async () => {
   } catch (err) {
     console.error(err);
   }
+};
+
+const isActive = (path) => {
+  return route.path === path;
 };
 </script>
 

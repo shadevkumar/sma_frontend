@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-center">
+  <div class="flex max-md:flex-col-reverse justify-center gap-6">
     <ConnectUsers :users="connectUsers" />
     <UserRequest />
   </div>
@@ -8,27 +8,26 @@
 <script setup lang="ts">
 const { $useAuthCookies } = useNuxtApp();
 const { accessToken } = $useAuthCookies();
-const { checkAndRefreshToken } = useAuth();
+const { checkAndRefreshToken } = useTokenRefresh();
 const config = useRuntimeConfig();
 const apiUrl = config.public.SMA_API_URL;
+const connectUsers = ref([]); 
 
-setTimeout(() => {
-  console.log("Checking and refreshing token from settimeout...");
-  checkAndRefreshToken();
-}, 1000);
+await checkAndRefreshToken();
 
-const { data: connectUsers, error } = await useFetch(
-  `${apiUrl}/follow/unfollowed`,
-  {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${accessToken.value}`,
-    },
-  }
-);
+const { data, error } = await useFetch(`${apiUrl}/follow/unfollowed`, {
+  method: "GET",
+  headers: {
+    Authorization: `Bearer ${accessToken.value}`,
+  },
+});
+if (data.value) {
+  connectUsers.value = data.value; 
+}
 if (error.value) {
   console.error("Error fetching users:", error.value);
 }
+
 
 definePageMeta({
   middleware: "auth",

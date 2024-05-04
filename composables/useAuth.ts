@@ -32,6 +32,11 @@ export const useAuth = () => {
   const config = useRuntimeConfig();
   const apiUrl = config.public.SMA_API_URL;
 
+  let userId: string | null = null;
+  if (process.client) {
+    userId = localStorage.getItem("userId");
+  }
+
   const signup = async (user: User) => {
     try {
       const response = await $fetch(`${apiUrl}/auth/signup`, {
@@ -53,7 +58,6 @@ export const useAuth = () => {
 
   const login = async (user: User) => {
     try {
-      console.log("apiUrl in login", apiUrl);
       const response = await $fetch<AuthResponse>(`${apiUrl}/auth/login`, {
         method: "POST",
         body: JSON.stringify(user),
@@ -77,33 +81,23 @@ export const useAuth = () => {
 
   const refreshTokens = async () => {
     try {
-      console.log("Attempting to refresh tokens inside refreshTokens...");
-
       const response = await $fetch<AuthResponse>(`${apiUrl}/auth/refresh`, {
         method: "POST",
         body: JSON.stringify({ refreshToken: refreshToken.value }),
       });
-      console.log("Tokens refreshed successfully.");
       accessToken.value = response.access_token;
       refreshToken.value = response.refresh_token;
+      // console.log("Tokens refreshed successfully.");
+      return;
     } catch (error) {
-      console.error("Failed to refresh tokens:", error);
-      throw new Error("Failed to refresh tokens after several attempts");
+      console.error("Failed to refresh tokens logging out:", error);
+
+      logout(userId);
     }
   };
 
-  const checkAndRefreshToken = async () => {
-    if (
-      accessToken.value !== undefined &&
-      isTokenCloseToExpiry(accessToken.value)
-    ) {
-      await refreshTokens();
-    }
-  };
-
-  const logout = async (userId: string) => {
+  const logout = async (userId: string | null) => {
     try {
-      console.log("userId", userId);
       if (userId) {
         await $fetch(`${apiUrl}/auth/logout`, {
           method: "POST",
@@ -130,6 +124,5 @@ export const useAuth = () => {
     login,
     logout,
     refreshTokens,
-    checkAndRefreshToken,
   };
 };

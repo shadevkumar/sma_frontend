@@ -61,10 +61,8 @@ const handleSubmit = async () => {
       password: password.value,
     });
 
-    console.log("Sign up successful.", response);
     navigateTo("/login");
   } catch (err) {
-    console.log(err);
     errorMessage.value = err.message;
   }
 };

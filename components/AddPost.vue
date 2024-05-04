@@ -1,18 +1,35 @@
 <template>
   <teleport to="body">
-    <div v-if="isVisible" class="modal">
+    <div v-if="isVisible" class="modal z-50">
       <form
         @submit.prevent="handleSubmit"
-        class="bg-[#867272] h-96 w-[40%] p-6 gap-10 flex flex-col"
+        class="bg-[#1c1c1c] h-[50vh] md:h-96 w-[95%] md:w-[40%] p-6 gap-10 flex flex-col justify-between rounded-md focus:outline-none shadow-lg border-none"
       >
-        <input v-model="title" placeholder="Title" required />
-        <textarea
-          v-model="description"
-          placeholder="Description"
-          required
-        ></textarea>
-        <button class="bg-blue-500 py-1" type="submit">Publish</button>
-        <button @click="close">Close</button>
+        <div class="flex flex-col gap-8">
+          <input
+            v-model="title"
+            placeholder="Title"
+            required
+            class="h-10 p-4 bg-[#2c2c2c] text-white resize-none rounded-md focus:outline-0"
+          />
+          <textarea
+            v-model="description"
+            placeholder="Description"
+            required
+            class="min-h-44 md:min-h-32 p-4 bg-[#2c2c2c] text-white resize-none rounded-md focus:outline-0"
+          ></textarea>
+        </div>
+        <div class="flex gap-4 justify-end">
+          <button @click="close" class="text-white">Close</button>
+
+          <button
+            class="bg-zinc-200 py-1 px-2 rounded-md text-black"
+            type="submit"
+          >
+            <Icon name="material-symbols:send-outline-rounded" />
+            Publish
+          </button>
+        </div>
       </form>
     </div>
   </teleport>
@@ -29,18 +46,18 @@ const isVisible = computed(() => uiStore.isAddPostVisible);
 const title = ref("");
 const description = ref("");
 const authorId = ref(null); // Initialize as null
-const { checkAndRefreshToken } = useAuth();
+const { checkAndRefreshToken } = useTokenRefresh();
 
 onMounted(() => {
   if (process.client) {
-    authorId.value = localStorage.getItem("userId"); // Access localStorage only on client side
+    authorId.value = localStorage.getItem("userId");
   }
 });
-console.log("authorId", authorId.value);
 
 const handleSubmit = async () => {
   try {
     await checkAndRefreshToken();
+
     await createPost(
       {
         title: title.value,

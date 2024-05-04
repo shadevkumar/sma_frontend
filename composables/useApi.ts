@@ -1,13 +1,14 @@
-import { useAuth } from "./useAuth";
 
 interface PostData {
   title: string;
   description: string;
 }
-const config = useRuntimeConfig();
-const apiUrl = config.public.SMA_API_URL;
+
 
 export const createPost = async (postData: PostData, accessToken: string) => {
+
+const config = useRuntimeConfig();
+const apiUrl = config.public.SMA_API_URL;
   try {
     const response = await $fetch(`${apiUrl}/posts`, {
       method: "POST",

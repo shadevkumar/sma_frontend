@@ -1,20 +1,20 @@
 <template>
-  <div class="w-[50%] p-6 m-4">
+  <div class="p-2 m-2 w-[90%]">
     <div v-if="posts.length === 0" class="text-center p-10">
-      <p class="text-xl">Follow others to see their posts!</p>
+      <p class="text-xl text-[#86878a]">Follow others to see their posts!</p>
     </div>
     <div
       v-else
       v-for="post in posts"
       :key="post.id"
-      class="bg-white rounded-md my-6 p-4 border border-gray-200 shadow-md min-h-48"
+      class="bg-white rounded-md my-6 p-4 border border-gray-200 shadow-md min-h-40"
     >
-      <div class="flex gap-6 items-center text-sm">
+      <div class="flex gap-6 items-center justify-between text-sm">
         <p>{{ post.author.username }}</p>
         <p>{{ formatCreatedAt(post.createdAt) }}</p>
       </div>
-      <h3 class="text-2xl font-semibold">{{ post.title }}</h3>
-      <p class="text-lg">{{ post.description }}</p>
+      <h3 class=" text-xl md:text-2xl font-semibold">{{ post.title }}</h3>
+      <p class="text-base md:text-lg">{{ post.description }}</p>
     </div>
   </div>
 </template>
