@@ -16,18 +16,19 @@
             v-model="description"
             placeholder="Description"
             required
-            class="min-h-44 md:min-h-32 p-4 bg-[#2c2c2c] text-white resize-none rounded-md focus:outline-0"
+            class="min-h-36 md:min-h-32 p-4 bg-[#2c2c2c] text-white resize-none rounded-md focus:outline-0"
           ></textarea>
         </div>
         <div class="flex gap-4 justify-end">
           <button @click="close" class="text-white">Close</button>
 
           <button
-            class="bg-zinc-200 py-1 px-2 rounded-md text-black"
+            :class="postSuccess ? 'bg-green-500' : 'bg-zinc-200'"
+            :disabled="postSuccess"
+            class="py-1 px-2 rounded-md text-black"
             type="submit"
           >
-            <Icon name="material-symbols:send-outline-rounded" />
-            Publish
+            {{ postSuccess ? "Published" : "Publish" }}
           </button>
         </div>
       </form>
@@ -45,8 +46,9 @@ const uiStore = useUIStore();
 const isVisible = computed(() => uiStore.isAddPostVisible);
 const title = ref("");
 const description = ref("");
-const authorId = ref(null); // Initialize as null
-const { checkAndRefreshToken } = useTokenRefresh();
+const authorId = ref(null);
+const postSuccess = ref(false); // State to track if the post was successfully created
+// const { checkAndRefreshToken } = useTokenRefresh();
 
 onMounted(() => {
   if (process.client) {
@@ -56,7 +58,7 @@ onMounted(() => {
 
 const handleSubmit = async () => {
   try {
-    await checkAndRefreshToken();
+    // await checkAndRefreshToken();
 
     await createPost(
       {
@@ -66,9 +68,13 @@ const handleSubmit = async () => {
       },
       accessToken.value
     );
+    postSuccess.value = true;
     title.value = "";
     description.value = "";
-    uiStore.toggleAddPost();
+    setTimeout(() => {
+      uiStore.toggleAddPost();
+      postSuccess.value = false; // Close the modal after 2 seconds
+    }, 2000);
   } catch (error) {
     console.error("Failed to create post:", error);
   }

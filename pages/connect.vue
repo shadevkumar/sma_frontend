@@ -13,7 +13,7 @@ const config = useRuntimeConfig();
 const apiUrl = config.public.SMA_API_URL;
 const connectUsers = ref([]); 
 
-await checkAndRefreshToken();
+// await checkAndRefreshToken();
 
 const { data, error } = await useFetch(`${apiUrl}/follow/unfollowed`, {
   method: "GET",
@@ -27,7 +27,6 @@ if (data.value) {
 if (error.value) {
   console.error("Error fetching users:", error.value);
 }
-
 
 definePageMeta({
   middleware: "auth",

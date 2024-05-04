@@ -15,7 +15,7 @@
         </ul>
         <div>
           <button
-            class="bg-red-700 px-1 md:px-2 py-1 text-sm md:text-base rounded-md w-full text-white"
+            class="bg-red-700 px-1 md:px-2 py-1 text-sm md:text-base rounded-md w-full text-white flex items-center"
             @click="handleLogout"
           >
             <Icon name="material-symbols-light:logout-rounded" />
@@ -38,9 +38,7 @@ if (process.client) {
 }
 const handleLogout = async () => {
   try {
-    if (userId) {
-      await logout(userId);
-    }
+    await logout(userId);
   } catch (err) {
     console.error(err);
   }

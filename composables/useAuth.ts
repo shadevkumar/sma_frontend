@@ -13,10 +13,8 @@ interface AuthResponse {
 }
 
 interface ErrorResponse {
-  response?: {
-    statusCode?: number;
-    message?: string;
-  };
+  statusCode?: number;
+  message?: string;
 }
 
 export const useAuth = () => {
@@ -29,12 +27,13 @@ export const useAuth = () => {
     refreshToken: Ref<string | null | undefined>;
   } = $useAuthCookies();
 
+
   const config = useRuntimeConfig();
   const apiUrl = config.public.SMA_API_URL;
 
   let userId: string | null = null;
   if (process.client) {
-    userId = localStorage.getItem("userId");
+  userId = localStorage.getItem("userId");
   }
 
   const signup = async (user: User) => {
@@ -45,12 +44,13 @@ export const useAuth = () => {
       });
       return response;
     } catch (error: unknown) {
+      console.error("Signup Error:", error);
       const typedError = error as ErrorResponse;
-      if (typedError.response && typedError.response.statusCode === 409) {
+      if (typedError.statusCode === 409) {
         throw new Error("Username already taken");
       } else {
         throw new Error(
-          typedError.response?.message || "An error occurred during signup"
+          typedError.message || "An error occurred during signup"
         );
       }
     }
@@ -69,30 +69,33 @@ export const useAuth = () => {
       return response;
     } catch (error: unknown) {
       const typedError = error as ErrorResponse;
-      if (typedError.response && typedError.response.statusCode === 401) {
+      if (typedError.statusCode === 401) {
         throw new Error("Invalid credentials");
       } else {
-        throw new Error(
-          typedError.response?.message || "An error occurred during login"
-        );
+        throw new Error(typedError.message || "An error occurred during login");
       }
     }
   };
 
   const refreshTokens = async () => {
+
+    if(!refreshToken.value){
+      console.error("Refresh token is missing.");
+    }
+
     try {
       const response = await $fetch<AuthResponse>(`${apiUrl}/auth/refresh`, {
         method: "POST",
-        body: JSON.stringify({ refreshToken: refreshToken.value }),
+        body: JSON.stringify({ refreshToken: refreshToken?.value }),
       });
       accessToken.value = response.access_token;
       refreshToken.value = response.refresh_token;
-      // console.log("Tokens refreshed successfully.");
+
       return;
     } catch (error) {
-      console.error("Failed to refresh tokens logging out:", error);
-
-      logout(userId);
+      console.error("Failed to refresh tokens:", error);
+      logout(userId); // Ensure logout is handled correctly
+      navigateTo("/login");
     }
   };
 

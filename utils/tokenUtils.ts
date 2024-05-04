@@ -6,7 +6,10 @@ export const isTokenCloseToExpiry = (
   if (!token) return false;
   const payload = JSON.parse(atob(token.split(".")[1]));
   const expTime = payload.exp * 1000; // Convert to milliseconds
-  const timeToExpire = expTime - Date.now();
-  // console.log(`Time to expire: ${timeToExpire}`);
-  return timeToExpire < threshold;
+  const currentTime = Date.now();
+  const timeToExpire = expTime - currentTime;
+  // console.log(
+  //   `Current Time: ${currentTime}, Expiration Time: ${expTime}, Time to Expire: ${timeToExpire}`
+  // );
+  return timeToExpire < threshold && timeToExpire > 0;
 };

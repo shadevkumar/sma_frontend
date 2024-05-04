@@ -2,15 +2,6 @@ export const useFollow = () => {
   const config = useRuntimeConfig();
   const apiUrl = config.public.SMA_API_URL;
 
-  //   const fetchUsers = async () => {
-  //     try {
-  //       return await $fetch(`${apiUrl}/follow/unfollowed`);
-  //     } catch (error) {
-  //       console.error("Failed to fetch users:", error);
-  //       throw error;
-  //     }
-  //   };
-
   const followRequest = async (followerId: string, accessToken: string) => {
     try {
       return await $fetch(`${apiUrl}/follow/request/${followerId}`, {

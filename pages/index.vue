@@ -21,14 +21,14 @@
         <div class="flex w-full px-8 2xl:px-24 md:px-14 md:pt-4">
           <div
             @click="openAddPost"
-            class="text-[#86878a] text-xl w-full md:w-[50%] bg-[#F9F9FB] cursor-pointer mt-4 p-4 rounded-md border"
+            class="text-[#86878a] text-xl w-full md:w-[50%] bg-[#F9F9FB] cursor-pointer mt-4 p-4 rounded-md border flex items-center gap-1"
           >
             <Icon name="material-symbols:add-circle" />
             Add Post...
           </div>
         </div>
         <AddPost ref="addPostComponent" />
-        <Timeline :posts="latestPosts" />
+        <Timeline :posts="posts" />
       </div>
     </div>
   </div>
@@ -55,9 +55,6 @@ const { data: posts, error } = await useFetch(`${apiUrl}/posts/following`, {
   },
 });
 
-const latestPosts = computed(() =>
-  posts.value ? [...posts.value].reverse() : []
-);
 
 if (error.value) {
   console.error("Error fetching posts:", error.value);

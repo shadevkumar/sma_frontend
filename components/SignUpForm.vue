@@ -2,7 +2,7 @@
   <div class="flex items-center justify-center min-h-screen bg-[#161616]">
     <form
       @submit.prevent="handleSubmit"
-      class="border p-6 gap-2 bg-[#ffffff] w-[30%] rounded-md"
+      class="border p-6 gap-2 bg-[#ffffff] lg:w-[30%] 2xl:w-[20%] rounded-md"
     >
       <h1 class="text-2xl font-bold mb-4">Sign Up</h1>
 
@@ -15,7 +15,12 @@
           required
           class="border-2"
         />
-        <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+        <p v-if="successMessage" class="success">
+          {{ successMessage }}
+        </p>
+        <p v-else-if="errorMessage" class="error">
+          {{ errorMessage }}
+        </p>
       </div>
       <div class="flex flex-col gap-2">
         <label for="password">Password</label>
@@ -49,21 +54,23 @@ import { useAuth } from "@/composables/useAuth";
 const username = ref("");
 const password = ref("");
 const errorMessage = ref("");
+const successMessage = ref("");
 
 const { signup } = useAuth();
 
 const handleSubmit = async () => {
-  errorMessage.value = ""; // Reset the error message
+  errorMessage.value = ""; // Reset the error message before attempting to sign up
 
   try {
     const response = await signup({
       username: username.value,
       password: password.value,
     });
-
-    navigateTo("/login");
+    successMessage.value = "Signup successful! Redirecting..."; // Set success message
+    setTimeout(() => navigateTo("/login"), 2000); // Redirect after showing success message
   } catch (err) {
-    errorMessage.value = err.message;
+    console.error(err);
+    errorMessage.value = err.message; // Display any error messages to the user
   }
 };
 </script>
@@ -71,5 +78,8 @@ const handleSubmit = async () => {
 <style scoped>
 .error {
   color: red;
+}
+.success {
+  color: green; /* Style for success message */
 }
 </style>

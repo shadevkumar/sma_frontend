@@ -3,7 +3,7 @@
   <div class="flex items-center justify-center min-h-screen bg-[#161616]">
     <form
       @submit.prevent="handleSubmit"
-      class="border p-6 gap-2 bg-[#ffffff] w-[30%] rounded-md"
+      class="border p-6 gap-2 bg-[#ffffff] lg:w-[30%] 2xl:w-[20%] rounded-md"
     >
       <h1 class="text-2xl font-bold mb-4">Login</h1>
 
@@ -43,7 +43,7 @@
   </div>
 </template>
 
-<script setup lang="ts" >
+<script setup lang="ts">
 import { ref } from "vue";
 import { useAuth } from "@/composables/useAuth";
 import { navigateTo } from "nuxt/app";

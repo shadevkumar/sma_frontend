@@ -3,8 +3,6 @@ interface PostData {
   title: string;
   description: string;
 }
-
-
 export const createPost = async (postData: PostData, accessToken: string) => {
 
 const config = useRuntimeConfig();
