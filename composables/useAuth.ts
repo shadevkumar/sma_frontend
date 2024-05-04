@@ -21,7 +21,13 @@ interface ErrorResponse {
 
 export const useAuth = () => {
   const { $useAuthCookies } = useNuxtApp();
-  const { accessToken, refreshToken }: Ref<string | null> = $useAuthCookies();
+  const {
+    accessToken,
+    refreshToken,
+  }: {
+    accessToken: Ref<string | null | undefined>;
+    refreshToken: Ref<string | null | undefined>;
+  } = $useAuthCookies();
 
   const config = useRuntimeConfig();
   const apiUrl = config.public.SMA_API_URL;
@@ -47,6 +53,7 @@ export const useAuth = () => {
 
   const login = async (user: User) => {
     try {
+      console.log("apiUrl in login", apiUrl);
       const response = await $fetch<AuthResponse>(`${apiUrl}/auth/login`, {
         method: "POST",
         body: JSON.stringify(user),
@@ -86,7 +93,10 @@ export const useAuth = () => {
   };
 
   const checkAndRefreshToken = async () => {
-    if (isTokenCloseToExpiry(accessToken.value)) {
+    if (
+      accessToken.value !== undefined &&
+      isTokenCloseToExpiry(accessToken.value)
+    ) {
       await refreshTokens();
     }
   };

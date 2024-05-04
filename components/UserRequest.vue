@@ -27,12 +27,14 @@
 
 <script setup lang="ts">
 const { acceptFollow, rejectFollow } = useFollow();
+const config = useRuntimeConfig();
+const apiUrl = config.public.SMA_API_URL;
 const accessToken = useCookie("access_token");
 const requests = ref([]);
 
 const fetchRequests = async () => {
   try {
-    const data = await $fetch(`${smaApiUrl}/follow/requests`, {
+    const data = await $fetch(`${apiUrl}/follow/requests`, {
       headers: {
         Authorization: `Bearer ${accessToken.value}`,
       },
