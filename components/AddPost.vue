@@ -48,7 +48,6 @@ const title = ref("");
 const description = ref("");
 const authorId = ref(null);
 const postSuccess = ref(false); // State to track if the post was successfully created
-// const { checkAndRefreshToken } = useTokenRefresh();
 
 onMounted(() => {
   if (process.client) {
@@ -58,7 +57,6 @@ onMounted(() => {
 
 const handleSubmit = async () => {
   try {
-    // await checkAndRefreshToken();
 
     await createPost(
       {

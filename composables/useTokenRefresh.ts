@@ -6,10 +6,8 @@ export const useTokenRefresh = () => {
     const { $useAuthCookies } = useNuxtApp();
     const {
       accessToken,
-      refreshToken,
     }: {
       accessToken: Ref<string | null | undefined>;
-      refreshToken: Ref<string | null | undefined>;
     } = $useAuthCookies();
 
     setInterval(async () => {

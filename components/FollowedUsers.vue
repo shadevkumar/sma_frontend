@@ -27,12 +27,16 @@ const accessToken = useCookie("access_token").value;
 let followedUsers = ref([]);
 const config = useRuntimeConfig();
 const apiUrl = config.public.SMA_API_URL;
+const { refreshTokens } = useAuth();
 
 const { unFollowUser } = useFollow();
 
 const profileName = ref("Anonymous");
 
 const fetchFollowedUsers = async () => {
+  if (isTokenCloseToExpiry(accessToken)) {
+    await refreshTokens();
+  }
   try {
     const data = await $fetch(`${apiUrl}/follow/followed`, {
       headers: {

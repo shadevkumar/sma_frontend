@@ -8,12 +8,10 @@
 <script setup lang="ts">
 const { $useAuthCookies } = useNuxtApp();
 const { accessToken } = $useAuthCookies();
-const { checkAndRefreshToken } = useTokenRefresh();
 const config = useRuntimeConfig();
 const apiUrl = config.public.SMA_API_URL;
 const connectUsers = ref([]); 
 
-// await checkAndRefreshToken();
 
 const { data, error } = await useFetch(`${apiUrl}/follow/unfollowed`, {
   method: "GET",

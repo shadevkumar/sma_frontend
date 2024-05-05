@@ -78,12 +78,10 @@ export const useAuth = () => {
 
   let isRefreshing = false;
   const refreshTokens = async () => {
-    // console.log("refreshToken.value at refreshToken func:", refreshToken.value);
     if (!refreshToken.value) {
       console.error("Refresh token is missing.");
     }
     const currentRefreshToken = refreshToken.value;
-    // console.log("OldRefreshToken", OldRefreshToken);
 
     if (!currentRefreshToken) {
       console.error("currentRefreshToken is missing.");
@@ -99,10 +97,9 @@ export const useAuth = () => {
       });
       accessToken.value = response.access_token;
       refreshToken.value = response.refresh_token;
-      // console.log("Tokens refreshed successfully:", response.refresh_token);
     } catch (error) {
       console.error("Failed to refresh tokens logout:", error);
-      logout(userId); // Ensure logout is handled correctly
+      logout(userId);
       navigateTo("/login");
     } finally {
       isRefreshing = false;
