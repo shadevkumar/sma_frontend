@@ -27,13 +27,12 @@ export const useAuth = () => {
     refreshToken: Ref<string | null | undefined>;
   } = $useAuthCookies();
 
-
   const config = useRuntimeConfig();
   const apiUrl = config.public.SMA_API_URL;
 
   let userId: string | null = null;
   if (process.client) {
-  userId = localStorage.getItem("userId");
+    userId = localStorage.getItem("userId");
   }
 
   const signup = async (user: User) => {
@@ -77,25 +76,36 @@ export const useAuth = () => {
     }
   };
 
+  let isRefreshing = false;
   const refreshTokens = async () => {
-
-    if(!refreshToken.value){
+    // console.log("refreshToken.value at refreshToken func:", refreshToken.value);
+    if (!refreshToken.value) {
       console.error("Refresh token is missing.");
     }
+    const currentRefreshToken = refreshToken.value;
+    // console.log("OldRefreshToken", OldRefreshToken);
+
+    if (!currentRefreshToken) {
+      console.error("currentRefreshToken is missing.");
+    }
+
+    if (isRefreshing) return;
+    isRefreshing = true;
 
     try {
       const response = await $fetch<AuthResponse>(`${apiUrl}/auth/refresh`, {
         method: "POST",
-        body: JSON.stringify({ refreshToken: refreshToken?.value }),
+        body: JSON.stringify({ refreshToken: currentRefreshToken }),
       });
       accessToken.value = response.access_token;
       refreshToken.value = response.refresh_token;
-
-      return;
+      // console.log("Tokens refreshed successfully:", response.refresh_token);
     } catch (error) {
-      console.error("Failed to refresh tokens:", error);
+      console.error("Failed to refresh tokens logout:", error);
       logout(userId); // Ensure logout is handled correctly
       navigateTo("/login");
+    } finally {
+      isRefreshing = false;
     }
   };
 

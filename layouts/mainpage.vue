@@ -8,6 +8,16 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { onMounted } from "vue";
+import { useTokenRefresh } from "@/composables/useTokenRefresh";
+
+const { setupTokenRefreshInterval } = useTokenRefresh();
+
+onMounted(() => {
+
+  setupTokenRefreshInterval();
+});
+</script>
 
 <style lang="scss" scoped></style>

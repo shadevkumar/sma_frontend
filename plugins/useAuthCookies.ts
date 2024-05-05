@@ -1,4 +1,4 @@
-// plugins/useAuthCookies.ts
+// plugins to provide Cookies at composables and in entire app
 import { useCookie } from "nuxt/app";
 
 export default defineNuxtPlugin(() => {

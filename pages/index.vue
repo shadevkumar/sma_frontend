@@ -42,11 +42,6 @@ const { accessToken } = $useAuthCookies();
 const config = useRuntimeConfig();
 const apiUrl = config.public.SMA_API_URL;
 
-const { setupTokenRefreshInterval } = useTokenRefresh();
-
-onMounted(() => {
-  setupTokenRefreshInterval();
-});
 
 const { data: posts, error } = await useFetch(`${apiUrl}/posts/following`, {
   method: "GET",

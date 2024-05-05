@@ -14,7 +14,4 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     return navigateTo("/login");
   }
 
-  // if (accessToken.value && isTokenCloseToExpiry(accessToken.value)) {
-  //   await refreshTokens(); // Make sure this function is imported and correctly handles token refresh
-  // }
 });
